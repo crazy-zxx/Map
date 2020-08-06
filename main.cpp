@@ -1,4 +1,5 @@
 #include <iostream>
+#include <queue>
 
 using namespace std;
 
@@ -55,6 +56,7 @@ int locateVex(MGraph g, VertexType v) {
             return i;
         }
     }
+    return -1;
 }
 
 void createDG(MGraph &g) {
@@ -79,8 +81,9 @@ void createDG(MGraph &g) {
         VertexType v1, v2;
         cin >> v1 >> v2;
         int i = locateVex(g, v1), j = locateVex(g, v2);
-        g.arcs[i][j].adj = 1;
-
+        if (i >= 0 && j >= 0) {
+            g.arcs[i][j].adj = 1;
+        }
     }
 
 }
@@ -108,7 +111,9 @@ void createDN(MGraph &g) {
         int w;
         cin >> v1 >> v2 >> w;
         int i = locateVex(g, v1), j = locateVex(g, v2);
-        g.arcs[i][j].adj = w;
+        if (i >= 0 && j >= 0) {
+            g.arcs[i][j].adj = w;
+        }
 
     }
 }
@@ -135,8 +140,10 @@ void createUDG(MGraph &g) {
         VertexType v1, v2;
         cin >> v1 >> v2;
         int i = locateVex(g, v1), j = locateVex(g, v2);
-        g.arcs[i][j].adj = 1;
-        g.arcs[j][i].adj = 1;
+        if (i >= 0 && j >= 0) {
+            g.arcs[i][j].adj = 1;
+            g.arcs[j][i].adj = 1;
+        }
 
     }
 }
@@ -164,11 +171,14 @@ void createUDN(MGraph &g) {
         int w;
         cin >> v1 >> v2 >> w;
         int i = locateVex(g, v1), j = locateVex(g, v2);
-        g.arcs[i][j].adj = w;
-        g.arcs[j][i].adj = w;
+        if (i >= 0 && j >= 0) {
+            g.arcs[i][j].adj = w;
+            g.arcs[j][i].adj = w;
+        }
 
     }
 }
+
 //**********************************************创建邻接矩阵图*****************************************************
 void createGraph(MGraph &g) {
     int selectGraph;
@@ -195,6 +205,7 @@ void createGraph(MGraph &g) {
             return;
     }
 }
+
 //输出邻接矩阵
 void printMGraph(MGraph g) {
     for (int i = 0; i < g.vexnum; ++i) {
@@ -213,6 +224,7 @@ int locateVex(ALGraph g, VertexType v) {
             return i;
         }
     }
+    return -1;
 }
 
 void createDG(ALGraph &g) {
@@ -235,11 +247,13 @@ void createDG(ALGraph &g) {
         VertexType v1, v2;
         cin >> v1 >> v2;
         int i = locateVex(g, v1), j = locateVex(g, v2);
-        ArcNode *p = (ArcNode *) malloc(sizeof(ArcNode));
-        p->adjvex = j;
-        p->wight = 1;
-        p->nextarc = g.vertices[i].firstarc;      //此处链表使用了头插法，操作比较方便
-        g.vertices[i].firstarc = p;
+        if (i >= 0 && j >= 0) {
+            ArcNode *p = (ArcNode *) malloc(sizeof(ArcNode));
+            p->adjvex = j;
+            p->wight = 1;
+            p->nextarc = g.vertices[i].firstarc;      //此处链表使用了头插法，操作比较方便
+            g.vertices[i].firstarc = p;
+        }
     }
 
 }
@@ -265,11 +279,13 @@ void createDN(ALGraph &g) {
         int w;
         cin >> v1 >> v2 >> w;
         int i = locateVex(g, v1), j = locateVex(g, v2);
-        ArcNode *p = (ArcNode *) malloc(sizeof(ArcNode));
-        p->adjvex = j;
-        p->wight = w;
-        p->nextarc = g.vertices[i].firstarc;      //此处链表使用了头插法，操作比较方便
-        g.vertices[i].firstarc = p;
+        if (i >= 0 && j >= 0) {
+            ArcNode *p = (ArcNode *) malloc(sizeof(ArcNode));
+            p->adjvex = j;
+            p->wight = w;
+            p->nextarc = g.vertices[i].firstarc;      //此处链表使用了头插法，操作比较方便
+            g.vertices[i].firstarc = p;
+        }
     }
 }
 
@@ -293,16 +309,18 @@ void createUDG(ALGraph &g) {
         VertexType v1, v2;
         cin >> v1 >> v2;
         int i = locateVex(g, v1), j = locateVex(g, v2);
-        ArcNode *p = (ArcNode *) malloc(sizeof(ArcNode));
-        p->adjvex = j;
-        p->wight = 1;
-        p->nextarc = g.vertices[i].firstarc;
-        g.vertices[i].firstarc = p;
-        ArcNode *q = (ArcNode *) malloc(sizeof(ArcNode));   //对称操作
-        q->adjvex = i;
-        q->wight = 1;
-        q->nextarc = g.vertices[j].firstarc;
-        g.vertices[j].firstarc = q;
+        if (i >= 0 && j >= 0) {
+            ArcNode *p = (ArcNode *) malloc(sizeof(ArcNode));
+            p->adjvex = j;
+            p->wight = 1;
+            p->nextarc = g.vertices[i].firstarc;
+            g.vertices[i].firstarc = p;
+            ArcNode *q = (ArcNode *) malloc(sizeof(ArcNode));   //对称操作
+            q->adjvex = i;
+            q->wight = 1;
+            q->nextarc = g.vertices[j].firstarc;
+            g.vertices[j].firstarc = q;
+        }
     }
 }
 
@@ -327,16 +345,18 @@ void createUDN(ALGraph &g) {
         int w;
         cin >> v1 >> v2 >> w;
         int i = locateVex(g, v1), j = locateVex(g, v2);
-        ArcNode *p = (ArcNode *) malloc(sizeof(ArcNode));
-        p->adjvex = j;
-        p->wight = w;
-        p->nextarc = g.vertices[i].firstarc;
-        g.vertices[i].firstarc = p;
-        ArcNode *q = (ArcNode *) malloc(sizeof(ArcNode));   //对称操作
-        q->adjvex = i;
-        q->wight = w;
-        q->nextarc = g.vertices[j].firstarc;
-        g.vertices[j].firstarc = q;
+        if (i >= 0 && j >= 0) {
+            ArcNode *p = (ArcNode *) malloc(sizeof(ArcNode));
+            p->adjvex = j;
+            p->wight = w;
+            p->nextarc = g.vertices[i].firstarc;
+            g.vertices[i].firstarc = p;
+            ArcNode *q = (ArcNode *) malloc(sizeof(ArcNode));   //对称操作
+            q->adjvex = i;
+            q->wight = w;
+            q->nextarc = g.vertices[j].firstarc;
+            g.vertices[j].firstarc = q;
+        }
     }
 }
 
@@ -367,6 +387,7 @@ void createGraph(ALGraph &g) {
             return;
     }
 }
+
 //输出邻接表
 void printALGraph(ALGraph g) {
     for (int i = 0; i < g.vexnum; ++i) {
@@ -380,17 +401,99 @@ void printALGraph(ALGraph g) {
     }
 }
 
+//********************************************邻接矩阵 DFS & BFS ******************************************************
+//访问标志数组
+bool visited[MAX_VERTEX_NUM];
+
+int firstAdjVex(MGraph g, int v) {
+    for (int i = 0; i < g.vexnum; ++i) {
+        if (g.arcs[v][i].adj != 0 && g.arcs[v][i].adj != INFINITY) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+int nextAdjVex(MGraph g, int v, int w) {
+    for (int i = w + 1; i < g.vexnum; ++i) {
+        if (g.arcs[v][i].adj != 0 && g.arcs[v][i].adj != INFINITY) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+void DFS(MGraph g, int v) {
+
+    visited[v] = true;
+    cout << g.vers[v] << " ";
+    for (int i = firstAdjVex(g, v); i >= 0; i = nextAdjVex(g, v, i)) {
+        if (!visited[i]) {
+            DFS(g, i);
+        }
+    }
+}
+
+void DFSTraverse(MGraph g) {
+
+    for (int i = 0; i < g.vexnum; ++i) {        //初始化访问标志数组
+        visited[i] = false;
+    }
+
+    for (int j = 0; j < g.vexnum; ++j) {        //深度递归遍历所有未访问顶点
+        if (!visited[j]) {
+            DFS(g, j);
+        }
+    }
+}
+
+void BFS(MGraph g) {
+    queue<int> q;
+
+    for (int i = 0; i < g.vexnum; ++i) {        //初始化访问标志数组
+        visited[i] = false;
+    }
+
+    for (int j = 0; j < g.vexnum; ++j) {
+        if (!visited[j]) {
+            visited[j] = true;
+            cout << g.vers[j] << " ";
+            q.push(j);
+
+            while (!q.empty()) {
+                int t = q.front();
+                q.pop();
+
+                for (int i = firstAdjVex(g, t); i >= 0; i = nextAdjVex(g, t, i)) {
+                    if (!visited[i]) {
+                        visited[i] = true;
+                        cout << g.vers[i] << " ";
+                        q.push(i);
+                    }
+                }
+            }
+        }
+    }
+}
+
+
 
 
 int main() {
 
     MGraph mGraph;
     createGraph(mGraph);
+    cout << endl << "邻接矩阵:";
     printMGraph(mGraph);
+    cout << endl << "DFS:";
+    DFSTraverse(mGraph);
+    cout << endl << "DFS:";
+    BFS(mGraph);
 
-    ALGraph alGraph;
-    createGraph(alGraph);
-    printALGraph(alGraph);
+//    ALGraph alGraph;
+//    createGraph(alGraph);
+//    cout << endl << "邻接表:";
+//    printALGraph(alGraph);
 
     return 0;
 }
