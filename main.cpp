@@ -528,19 +528,19 @@ void BFS(ALGraph g) {
     }
 
     for (int i = 0; i < g.vexnum; ++i) {
-        if (!visited[i]){
-            visited[i]= true;
+        if (!visited[i]) {
+            visited[i] = true;
             q.push(i);
             cout << g.vertices[i].data << " ";
         }
 
-        while (!q.empty()){
-            int v=q.front();
+        while (!q.empty()) {
+            int v = q.front();
             q.pop();
 
-            for (int w = firstAdjVex(g,v); w >=0 ; w=nextAdjVex(g,v,w)) {
-                if (!visited[w]){
-                    visited[w]= true;
+            for (int w = firstAdjVex(g, v); w >= 0; w = nextAdjVex(g, v, w)) {
+                if (!visited[w]) {
+                    visited[w] = true;
                     q.push(w);
                     cout << g.vertices[w].data << " ";
                 }
@@ -548,6 +548,24 @@ void BFS(ALGraph g) {
 
         }
     }
+}
+
+//********************************************基于邻接表的算法******************************************************
+//无向图任意给定两点间是否存在长度为k的路径
+int kPath(ALGraph g, int a, int b, int k) {
+    if (a == b && k == 0) {
+        return 1;
+    } else if (k > 0) {
+        visited[a]= true;
+        for (ArcNode *i = g.vertices[a].firstarc; i != NULL; i = i->nextarc) {
+            int temp = i->adjvex;
+            if (!visited[temp] && kPath(g, temp, b, k - 1)) {
+                return 1;
+            }
+        }
+        visited[a]=false;
+    }
+    return 0;
 }
 
 
@@ -570,6 +588,8 @@ int main() {
     DFSTraverse(alGraph);
     cout << endl << "BFS:";
     BFS(alGraph);
+
+
 
     return 0;
 }
