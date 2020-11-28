@@ -1,8 +1,11 @@
 #include <iostream>
+#include <limits.h>
 #include <queue>
+#include <stack>
 
 using namespace std;
 
+//INT_MAX in limits.h
 #define INFINITY INT_MAX
 #define MAX_VERTEX_NUM 20
 
@@ -569,6 +572,58 @@ int kPath(ALGraph g, int a, int b, int k) {
 }
 
 
+//求所有顶点入度
+void inDegreeCalc(ALGraph g,int indegree[]){
+    for (int i = 0; i < g.vexnum; ++i) {
+        indegree[i]=0;
+    }
+    for (int i = 0; i < g.vexnum; ++i) {
+        for (ArcNode *p =g.vertices[i].firstarc ; p ; p=p->nextarc) {
+            indegree[p->adjvex]++;
+        }
+    }
+}
+
+//拓扑排序
+int TopologicalSort(ALGraph g){
+
+    int indegree[g.vexnum];
+    inDegreeCalc(g,indegree);
+
+    stack<int> s;   //存放零入度节点的栈
+
+    for (int i = 0; i < g.vexnum; ++i) {    //入度为零顶点入栈
+        if (!indegree[i]){
+            s.push(i);
+        }
+    }
+
+    int count=0;    //计数输出的节点
+
+    while (!s.empty()){
+        //输出一个零入度节点
+        int temp = s.top();
+        s.pop();
+        cout<<temp<<":"<<g.vertices[temp].data<<" ";
+        count++;
+
+        //该节点删除导致其指向的节点的入度减一
+        for (ArcNode *p=g.vertices[temp].firstarc;p;p=p->nextarc) {
+            if (!(--indegree[p->adjvex])){    //如果某节点入度减一后为零，则添加到栈中
+                s.push(p->adjvex);
+            }
+        }
+    }
+
+    if (count<g.vexnum){    //有回路无法拓扑排序
+        return 0;
+    } else{                 //拓扑排序成功
+        return 1;
+    }
+}
+
+
+
 int main() {
 
 //    MGraph mGraph;
@@ -582,13 +637,14 @@ int main() {
 
     ALGraph alGraph;
     createGraph(alGraph);
-    cout << endl << "邻接表:";
+    cout << endl << "邻接表: ";
     printALGraph(alGraph);
-    cout << endl << "DFS:";
+    cout << endl << "DFS: ";
     DFSTraverse(alGraph);
-    cout << endl << "BFS:";
+    cout << endl << "BFS: ";
     BFS(alGraph);
-
+    cout << endl << "TopologicalSort: ";
+    TopologicalSortAll(alGraph);
 
 
     return 0;
