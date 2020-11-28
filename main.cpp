@@ -644,7 +644,7 @@ int main() {
     cout << endl << "BFS: ";
     BFS(alGraph);
     cout << endl << "TopologicalSort: ";
-    TopologicalSortAll(alGraph);
+    TopologicalSort(alGraph);
 
 
     return 0;
